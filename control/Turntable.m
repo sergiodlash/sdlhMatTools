@@ -16,9 +16,8 @@ classdef Turntable
     %       [status, position, direction] = t.getStatus();
     %       t.close();
     %
-    %   Author:   Sergio de las Heras (sergio.delasheras@aalto.fi)
-    %   Created:  2024
-
+    %   Sergio de las Heras (sergio.delasheras@aalto.fi)
+    %   2024
 
     properties
         u
@@ -29,15 +28,31 @@ classdef Turntable
     methods
         function obj = Turntable(ipaddr,port)
             % Turntable Construct an instance of this class
-            % Create a turntable object
-            % On empty call, use defaults for turntable #2
-            % IP addr 192.168.1.34
-            % Port 6668
-            % (turntable 1: 130.233.150.101)
+            %   obj = Turntable()                  - defaults to turntable #2
+            %   obj = Turntable(1)                 - turntable #1 (130.233.150.101)
+            %   obj = Turntable(2)                 - turntable #2 (192.168.1.34)
+            %   obj = Turntable('192.168.1.99')    - explicit IP address
+            %   obj = Turntable(ipaddr, port)      - explicit IP + port
 
+            knownIPs = struct('tt1', '130.233.150.101', ...
+                                'tt2', '192.168.1.34');
+            
             if nargin < 1 || isempty(ipaddr)
-                ipaddr = '192.168.1.34'; 
+                ipaddr = knownIPs.tt2; % Default to turntable 2
+            elseif isnumeric(ipaddr)
+                switch ipaddr
+                    case 1
+                        ipaddr = knownIPs.tt1
+                    case 2 
+                        ipaddr = knownIPs.tt2
+                    otherwise
+                        error('Turntable invalid turntable number', ...
+                        'Unknown turntable number, use 1 or 2 or provide an IP')
+                end
+            elseif ischar(ipaddr) || isstring(ipaddr)
+                ipaddr = char(ipaddr);
             end
+            
             if nargin < 2 || isempty(port)
                 port = 6668; 
             end
