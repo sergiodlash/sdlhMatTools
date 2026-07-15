@@ -42,9 +42,9 @@ classdef Turntable
             elseif isnumeric(ipaddr)
                 switch ipaddr
                     case 1
-                        ipaddr = knownIPs.tt1
+                        ipaddr = knownIPs.tt1;
                     case 2 
-                        ipaddr = knownIPs.tt2
+                        ipaddr = knownIPs.tt2;
                     otherwise
                         error('Turntable invalid turntable number', ...
                         'Unknown turntable number, use 1 or 2 or provide an IP')
